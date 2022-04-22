@@ -1,0 +1,127 @@
+specVersion: 0.0.2
+description: PIXSales
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PIX
+    network: matic
+    source:
+      address: "0xB2435253C71FcA27bE41206EB2793E44e1Df6b6D"
+      abi: PIX
+      startBlock: 24520976
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/pix.ts
+      entities:
+        - Global
+        - Account
+        - PIX
+      abis:
+        - name: PIX
+          file: ./abis/pix.json
+      eventHandlers:
+        - event: PIXMinted(indexed address,indexed uint256,indexed uint256,uint8,uint8)
+          handler: handlePIXMinted
+        - event: Requested(indexed uint256,indexed uint256,indexed uint256)
+          handler: handlePIXRequested
+        - event: Requested(indexed uint256,indexed uint256,indexed uint256,uint256,uint256)
+          handler: handlePIXRequestedNew
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+
+  - kind: ethereum/contract
+    name: PIXFixedSale
+    network: matic
+    source:
+      address: "0x5A98E7cE0F72995fdc13D91255443F374c1299A6"
+      abi: PIXFixedSale
+      startBlock: 24520976
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/sale.ts
+      entities:
+        - Global
+        - Sale
+      abis:
+        - name: PIXFixedSale
+          file: ./abis/sale.json
+      eventHandlers:
+        - event: SaleRequested(indexed address,indexed uint256,address,uint256[],uint256)
+          handler: handleSaleRequested
+        - event: SaleUpdated(indexed uint256,uint256)
+          handler: handleSaleUpdated
+        - event: SaleCancelled(indexed uint256)
+          handler: handleSaleCancelled
+        - event: Purchased(indexed address,indexed address,indexed uint256,uint256)
+          handler: handleSalePurchased
+
+  - kind: ethereum/contract
+    name: PIXAuctionSale
+    network: matic
+    source:
+      address: "0x7754357c9Aafea07AE20Cac805a210f518b3d8E6"
+      abi: PIXAuctionSale
+      startBlock: 24520976
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/auction.ts
+      entities:
+        - Global
+        - Sale
+        - Bid
+      abis:
+        - name: PIXAuctionSale
+          file: ./abis/auction.json
+      eventHandlers:
+        - event: SaleRequested(indexed address,indexed uint256,address,uint64,uint256[],uint256)
+          handler: handleAuctionRequested
+        - event: SaleUpdated(indexed uint256,uint64,uint256)
+          handler: handleAuctionUpdated
+        - event: SaleCancelled(indexed uint256)
+          handler: handleAuctionCancelled
+        - event: Bid(indexed address,indexed uint256,uint256)
+          handler: handleBid
+        - event: BidCancelled(indexed address,indexed uint256,uint256)
+          handler: handleBidCancelled
+        - event: Purchased(indexed address,indexed address,indexed uint256,uint256)
+          handler: handleAuctionPurchased
+
+  - kind: ethereum/contract
+    name: PIXAuctionSaleNew
+    network: matic
+    source:
+      address: "0x87a016Ae5A52688a60415036D45191e632d5D403"
+      abi: PIXAuctionSaleNew
+      startBlock: 24520976
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/auction_new.ts
+      entities:
+        - Global
+        - Sale
+        - Bid
+      abis:
+        - name: PIXAuctionSaleNew
+          file: ./abis/auction_new.json
+      eventHandlers:
+        - event: SaleRequested(indexed address,indexed uint256,address,uint64,uint256[],uint256)
+          handler: handleAuctionRequested
+        - event: SaleUpdated(indexed uint256,uint64)
+          handler: handleAuctionUpdated
+        - event: SaleCancelled(indexed uint256)
+          handler: handleAuctionCancelled
+        - event: Bid(indexed address,indexed uint256,uint256)
+          handler: handleBid
+        - event: BidCancelled(indexed address,indexed uint256,uint256)
+          handler: handleBidCancelled
+        - event: Purchased(indexed address,indexed address,indexed uint256,uint256)
+          handler: handleAuctionPurchased

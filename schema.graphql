@@ -1,0 +1,84 @@
+type Global @entity {
+  id: ID!
+  value: BigInt!
+}
+
+type Account @entity {
+  id: ID!
+
+  balance: BigInt!
+  pixes: [PIX]! @derivedFrom(field: "account")
+  sales: [Sale]! @derivedFrom(field: "requestor")
+  purchases: [Sale]! @derivedFrom(field: "taker")
+  bids: [Bid]! @derivedFrom(field: "bidder")
+}
+
+type PIX @entity {
+  id: ID!
+
+  tokenId: BigInt!
+  pixId: BigInt!
+  category: BigInt!
+  size: BigInt!
+  account: Account!
+  sale: Sale
+}
+
+type PIXTransfer @entity {
+  id: ID!
+
+  pix: PIX!
+  transferId: BigInt!
+  from: Account
+  to: Account!
+}
+
+type PIXRequested @entity {
+    id: ID!
+    requestedId: BigInt!
+    dropId: BigInt!
+    playerId: BigInt!
+    mode: BigInt!
+    count: BigInt!
+    purchasedPacks: BigInt!
+}
+
+type Sale @entity {
+  id: ID!
+
+  type: BigInt!
+  isActive: Boolean!
+  requestor: Account
+  tokenIds: [BigInt!]!
+  tokens: BigInt!
+  price: BigInt!
+  category: BigInt
+  size: BigInt
+  createTimestamp: BigInt!
+
+  taker: Account
+  endTime: BigInt
+  soldDate: BigInt
+
+  bids: [Bid]! @derivedFrom(field: "sale")
+  pixes: [PIX]! @derivedFrom(field: "sale")
+}
+
+type SaleLog @entity {
+  id: ID!
+
+  logId: BigInt!
+  sale: Sale!
+  status: BigInt!
+}
+
+type Bid @entity {
+  id: ID!
+
+  sale: Sale!
+  bidder: Account!
+  price: BigInt!
+  isActive: Boolean!
+  category: BigInt
+  size: BigInt
+}

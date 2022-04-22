@@ -5,11 +5,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PIX
-    network: matic
+    network: mumbai
     source:
-      address: "0xB2435253C71FcA27bE41206EB2793E44e1Df6b6D"
+      address: "0x4BDcFa73220358b2072D58BD30ac565Ed1111B0c"
       abi: PIX
-      startBlock: 24520976
+      startBlock: 21779585
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -34,11 +34,11 @@ dataSources:
 
   - kind: ethereum/contract
     name: PIXFixedSale
-    network: matic
+    network: mumbai
     source:
-      address: "0x5A98E7cE0F72995fdc13D91255443F374c1299A6"
+      address: "0xBEce3771FfEE740fd6c71164a2F6756f219E04C8"
       abi: PIXFixedSale
-      startBlock: 24520976
+      startBlock: 21873535
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -62,11 +62,11 @@ dataSources:
 
   - kind: ethereum/contract
     name: PIXAuctionSale
-    network: matic
+    network: mumbai
     source:
-      address: "0x7754357c9Aafea07AE20Cac805a210f518b3d8E6"
+      address: "0xD5841454FC6F4F7Af4A28583137d30b002d76351"
       abi: PIXAuctionSale
-      startBlock: 24520976
+      startBlock: 21779787
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -95,11 +95,11 @@ dataSources:
 
   - kind: ethereum/contract
     name: PIXAuctionSaleNew
-    network: matic
+    network: mumbai
     source:
-      address: "0x87a016Ae5A52688a60415036D45191e632d5D403"
+      address: "0xEF9b6E127A2eecCB0eEA648290e9A079EA304285"
       abi: PIXAuctionSaleNew
-      startBlock: 24520976
+      startBlock: 25919202
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

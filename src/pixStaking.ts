@@ -8,7 +8,7 @@ export function handlePIXStaked(event: PIXStaked): void {
   );
 
   if (pixStaking == null) {
-    let pixStaking = new PIXStaking(
+    pixStaking = new PIXStaking(
       getPIXStakingId(event.params.account, event.params.tokenId)
     );
     pixStaking.pix = getPIXId(event.params.tokenId);

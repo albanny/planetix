@@ -100,6 +100,15 @@ export class Account extends Entity {
     this.set("pixes", Value.fromStringArray(value));
   }
 
+  get pixStakings(): Array<string | null> {
+    let value = this.get("pixStakings");
+    return value.toStringArray();
+  }
+
+  set pixStakings(value: Array<string | null>) {
+    this.set("pixStakings", Value.fromStringArray(value));
+  }
+
   get sales(): Array<string | null> {
     let value = this.get("sales");
     return value.toStringArray();
@@ -218,6 +227,64 @@ export class PIX extends Entity {
     } else {
       this.set("sale", Value.fromString(value as string));
     }
+  }
+}
+
+export class PIXStaking extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PIXStaking entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PIXStaking entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PIXStaking", id.toString(), this);
+  }
+
+  static load(id: string): PIXStaking | null {
+    return store.get("PIXStaking", id) as PIXStaking | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get pix(): string {
+    let value = this.get("pix");
+    return value.toString();
+  }
+
+  set pix(value: string) {
+    this.set("pix", Value.fromString(value));
+  }
+
+  get account(): string {
+    let value = this.get("account");
+    return value.toString();
+  }
+
+  set account(value: string) {
+    this.set("account", Value.fromString(value));
+  }
+
+  get staked(): boolean {
+    let value = this.get("staked");
+    return value.toBoolean();
+  }
+
+  set staked(value: boolean) {
+    this.set("staked", Value.fromBoolean(value));
   }
 }
 

@@ -8,6 +8,7 @@ type Account @entity {
 
   balance: BigInt!
   pixes: [PIX]! @derivedFrom(field: "account")
+  pixStakings: [PIXStaking]! @derivedFrom(field: "account")
   sales: [Sale]! @derivedFrom(field: "requestor")
   purchases: [Sale]! @derivedFrom(field: "taker")
   bids: [Bid]! @derivedFrom(field: "bidder")
@@ -24,6 +25,14 @@ type PIX @entity {
   sale: Sale
 }
 
+type PIXStaking @entity {
+  id: ID!
+
+  pix: PIX!
+  account: Account!
+  staked: Boolean!
+}
+
 type PIXTransfer @entity {
   id: ID!
 
@@ -34,13 +43,13 @@ type PIXTransfer @entity {
 }
 
 type PIXRequested @entity {
-    id: ID!
-    requestedId: BigInt!
-    dropId: BigInt!
-    playerId: BigInt!
-    mode: BigInt!
-    count: BigInt!
-    purchasedPacks: BigInt!
+  id: ID!
+  requestedId: BigInt!
+  dropId: BigInt!
+  playerId: BigInt!
+  mode: BigInt!
+  count: BigInt!
+  purchasedPacks: BigInt!
 }
 
 type Sale @entity {

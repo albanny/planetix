@@ -269,6 +269,33 @@ export class PIXStaking extends Entity {
     this.set("pix", Value.fromString(value));
   }
 
+  get pixId(): BigInt {
+    let value = this.get("pixId");
+    return value.toBigInt();
+  }
+
+  set pixId(value: BigInt) {
+    this.set("pixId", Value.fromBigInt(value));
+  }
+
+  get category(): BigInt {
+    let value = this.get("category");
+    return value.toBigInt();
+  }
+
+  set category(value: BigInt) {
+    this.set("category", Value.fromBigInt(value));
+  }
+
+  get size(): BigInt {
+    let value = this.get("size");
+    return value.toBigInt();
+  }
+
+  set size(value: BigInt) {
+    this.set("size", Value.fromBigInt(value));
+  }
+
   get account(): string {
     let value = this.get("account");
     return value.toString();

@@ -29,6 +29,9 @@ type PIXStaking @entity {
   id: ID!
 
   pix: PIX!
+  pixId: BigInt!
+  category: BigInt!
+  size: BigInt!
   account: Account!
   staked: Boolean!
   stakedAt: BigInt!

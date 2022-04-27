@@ -1,6 +1,6 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { PIXStaked, PIXUnstaked } from './entities/PIXStaking/PIXStaking';
-import { PIXStaking } from './entities/schema';
+import { PIXStaking, PIX } from './entities/schema';
 
 export function handlePIXStaked(event: PIXStaked): void {
   let pixStaking = PIXStaking.load(
@@ -11,7 +11,11 @@ export function handlePIXStaked(event: PIXStaked): void {
     pixStaking = new PIXStaking(
       getPIXStakingId(event.params.account, event.params.tokenId)
     );
-    pixStaking.pix = getPIXId(event.params.tokenId);
+    let pix = PIX.load(getPIXId(event.params.tokenId));
+    pixStaking.pix = pix.id;
+    pixStaking.pixId = pix.pixId;
+    pixStaking.category = pix.category;
+    pixStaking.size = pix.size;
     pixStaking.account = event.params.account.toHexString();
   }
 

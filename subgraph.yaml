@@ -46,6 +46,7 @@ dataSources:
       file: ./src/pixStaking.ts
       entities:
         - PIXStaking
+        - PIX
       abis:
         - name: PIXStaking
           file: ./abis/pix_staking.json

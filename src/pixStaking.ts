@@ -16,6 +16,7 @@ export function handlePIXStaked(event: PIXStaked): void {
   }
 
   pixStaking.staked = true;
+  pixStaking.stakedAt = event.block.timestamp;
 
   pixStaking.save();
 }

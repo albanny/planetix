@@ -286,6 +286,15 @@ export class PIXStaking extends Entity {
   set staked(value: boolean) {
     this.set("staked", Value.fromBoolean(value));
   }
+
+  get stakedAt(): BigInt {
+    let value = this.get("stakedAt");
+    return value.toBigInt();
+  }
+
+  set stakedAt(value: BigInt) {
+    this.set("stakedAt", Value.fromBigInt(value));
+  }
 }
 
 export class PIXTransfer extends Entity {

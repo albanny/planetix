@@ -6,12 +6,12 @@ export function handlePIXStaked(event: PIXStaked): void {
   let pixStaking = PIXStaking.load(
     getPIXStakingId(event.params.account, event.params.tokenId)
   );
+  let pix = PIX.load(getPIXId(event.params.tokenId));
 
   if (pixStaking == null) {
     pixStaking = new PIXStaking(
       getPIXStakingId(event.params.account, event.params.tokenId)
     );
-    let pix = PIX.load(getPIXId(event.params.tokenId));
     pixStaking.pix = pix.id;
     pixStaking.pixId = pix.pixId;
     pixStaking.category = pix.category;
@@ -31,12 +31,21 @@ export function handlePIXStaked(event: PIXStaked): void {
   }
   entity.value = entity.value.plus(BigInt.fromI32(1));
   entity.save();
+
+  let entityTVL = Global.load(getPIXStakingCategoryTVLId(pixStaking.category));
+  if (entityTVL == null) {
+    entityTVL = new Global(getPIXStakingCategoryTVLId(pixStaking.category));
+    entityTVL.value = new BigInt(0);
+  }
+  entityTVL.value = entityTVL.value.plus(pix.tier);
+  entityTVL.save();
 }
 
 export function handlePIXUnstaked(event: PIXUnstaked): void {
   let pixStaking = PIXStaking.load(
     getPIXStakingId(event.params.account, event.params.tokenId)
   );
+  let pix = PIX.load(getPIXId(event.params.tokenId));
 
   pixStaking.staked = false;
 
@@ -45,6 +54,10 @@ export function handlePIXUnstaked(event: PIXUnstaked): void {
   let entity = Global.load(getPIXStakingCategoryId(pixStaking.category));
   entity.value = entity.value.minus(BigInt.fromI32(1));
   entity.save();
+
+  let entityTVL = Global.load(getPIXStakingCategoryTVLId(pixStaking.category));
+  entityTVL.value = entityTVL.value.minus(pix.tier);
+  entityTVL.save();
 }
 
 function getPIXStakingId(account: Address, tokenId: BigInt): string {
@@ -57,4 +70,8 @@ function getPIXId(id: BigInt): string {
 
 function getPIXStakingCategoryId(category: BigInt): string {
   return 'pixStaking - Category - ' + category.toString();
+}
+
+function getPIXStakingCategoryTVLId(category: BigInt): string {
+  return 'pixStaking - Category - TVL - ' + category.toString();
 }

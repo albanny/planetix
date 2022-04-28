@@ -1,6 +1,6 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { PIXStaked, PIXUnstaked } from './entities/PIXStaking/PIXStaking';
-import { PIXStaking, PIX } from './entities/schema';
+import { PIXStaking, PIX, Global } from './entities/schema';
 
 export function handlePIXStaked(event: PIXStaked): void {
   let pixStaking = PIXStaking.load(
@@ -23,6 +23,14 @@ export function handlePIXStaked(event: PIXStaked): void {
   pixStaking.stakedAt = event.block.timestamp;
 
   pixStaking.save();
+
+  let entity = Global.load(getPIXStakingCategoryId(pixStaking.category));
+  if (entity == null) {
+    entity = new Global(getPIXStakingCategoryId(pixStaking.category));
+    entity.value = new BigInt(0);
+  }
+  entity.value = entity.value.plus(BigInt.fromI32(1));
+  entity.save();
 }
 
 export function handlePIXUnstaked(event: PIXUnstaked): void {
@@ -33,6 +41,10 @@ export function handlePIXUnstaked(event: PIXUnstaked): void {
   pixStaking.staked = false;
 
   pixStaking.save();
+
+  let entity = Global.load(getPIXStakingCategoryId(pixStaking.category));
+  entity.value = entity.value.minus(BigInt.fromI32(1));
+  entity.save();
 }
 
 function getPIXStakingId(account: Address, tokenId: BigInt): string {
@@ -41,4 +53,8 @@ function getPIXStakingId(account: Address, tokenId: BigInt): string {
 
 function getPIXId(id: BigInt): string {
   return 'PIX - ' + id.toString();
+}
+
+function getPIXStakingCategoryId(category: BigInt): string {
+  return 'pixStaking - Category - ' + category.toString();
 }

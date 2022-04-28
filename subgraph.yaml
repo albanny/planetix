@@ -47,6 +47,7 @@ dataSources:
       entities:
         - PIXStaking
         - PIX
+        - Global
       abis:
         - name: PIXStaking
           file: ./abis/pix_staking.json

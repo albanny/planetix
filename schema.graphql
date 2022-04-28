@@ -24,6 +24,7 @@ type PIX @entity {
   tier: BigInt!
   account: Account!
   sale: Sale
+  tokenMetadataURI: String!
 }
 
 type PIXStaking @entity {

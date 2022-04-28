@@ -31,6 +31,17 @@ export function handlePIXMinted(event: PIXMinted): void {
     pix.tier = new BigInt(0);
   }
 
+  let tokenMetadataURIResult = pixContract.try_tokenURI(pix.tokenId);
+  if (!tokenMetadataURIResult.reverted) {
+    if (tokenMetadataURIResult.value.startsWith('ipfs://')) {
+      pix.tokenMetadataURI = `https://ipfs.io/ipfs/${tokenMetadataURIResult.value.split('ipfs://')[1]}`;
+    } else {
+      pix.tokenMetadataURI = tokenMetadataURIResult.value;
+    }
+  } else {
+    pix.tokenMetadataURI = '';
+  }
+
   pix.save();
 }
 

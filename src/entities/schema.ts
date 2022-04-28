@@ -237,6 +237,15 @@ export class PIX extends Entity {
       this.set("sale", Value.fromString(value as string));
     }
   }
+
+  get tokenMetadataURI(): string {
+    let value = this.get("tokenMetadataURI");
+    return value.toString();
+  }
+
+  set tokenMetadataURI(value: string) {
+    this.set("tokenMetadataURI", Value.fromString(value));
+  }
 }
 
 export class PIXStaking extends Entity {

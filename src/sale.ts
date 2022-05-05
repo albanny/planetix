@@ -5,6 +5,7 @@ import {
   SaleUpdated,
   SaleCancelled,
   Purchased,
+  PurchasedWithSignature,
 } from "./entities/PIXFixedSale/PIXFixedSale";
 import { Global, Sale, SaleLog, PIX } from "./entities/schema";
 
@@ -73,6 +74,18 @@ export function handleSaleUpdated(event: SaleUpdated): void {
   let sale = Sale.load(getSaleId(event.params.saleId));
   sale.price = event.params.newPrice;
   sale.save();
+
+  let totalEntity = Global.load("totalSaleLogs");
+
+  let saleLog = new SaleLog(totalEntity.value.toString());
+  saleLog.logId = totalEntity.value;
+  saleLog.sale = getSaleId(event.params.saleId);
+  saleLog.status = BigInt.fromI32(3);
+  saleLog.price = event.params.newPrice;
+  saleLog.save();
+
+  totalEntity.value = totalEntity.value.plus(BigInt.fromI32(1));
+  totalEntity.save();
 }
 
 export function handleSaleCancelled(event: SaleCancelled): void {
@@ -132,8 +145,54 @@ export function handleSalePurchased(event: Purchased): void {
   totalEntity.save();
 }
 
+export function handleSalePurchasedWithSignature(
+  event: PurchasedWithSignature
+): void {
+  let entity = Global.load('fixedSalesWithHash');
+  if (entity == null) {
+    entity = new Global('fixedSalesWithHash');
+    entity.value = new BigInt(0);
+  }
+
+  let sale = new Sale(getSaleWithHashId(entity.value));
+  createAccount(event.params.seller);
+  createAccount(event.params.buyer);
+  sale.type = BigInt.fromI32(1);
+  sale.isActive = false;
+  sale.taker = event.params.buyer.toHexString();
+  sale.requestor = event.params.seller.toHexString();
+  sale.tokenIds = [event.params.tokenId];
+  sale.tokens = BigInt.fromI32(1);
+  sale.price = event.params.price;
+  sale.createTimestamp = event.block.timestamp;
+  sale.soldDate = event.block.timestamp;
+  sale.save();
+
+  let totalEntity = Global.load('totalSaleLogs');
+  if (totalEntity == null) {
+    totalEntity = new Global('totalSaleLogs');
+    totalEntity.value = new BigInt(0);
+  }
+
+  let saleLog = new SaleLog(totalEntity.value.toString());
+  saleLog.logId = totalEntity.value;
+  saleLog.sale = getSaleWithHashId(entity.value);
+  saleLog.status = BigInt.fromI32(2);
+  saleLog.save();
+
+  totalEntity.value = totalEntity.value.plus(BigInt.fromI32(1));
+  totalEntity.save();
+
+  entity.value = entity.value.plus(BigInt.fromI32(1));
+  entity.save();
+}
+
 function getSaleId(id: BigInt): string {
   return "F" + id.toString();
+}
+
+function getSaleWithHashId(id: BigInt): string {
+  return 'H' + id.toString();
 }
 
 function getPIXId(id: BigInt): string {

@@ -763,6 +763,40 @@ export class SaleLog extends Entity {
   set status(value: BigInt) {
     this.set("status", Value.fromBigInt(value));
   }
+
+  get price(): BigInt | null {
+    let value = this.get("price");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set price(value: BigInt | null) {
+    if (value === null) {
+      this.unset("price");
+    } else {
+      this.set("price", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get endTime(): BigInt | null {
+    let value = this.get("endTime");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set endTime(value: BigInt | null) {
+    if (value === null) {
+      this.unset("endTime");
+    } else {
+      this.set("endTime", Value.fromBigInt(value as BigInt));
+    }
+  }
 }
 
 export class Bid extends Entity {

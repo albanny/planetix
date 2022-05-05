@@ -203,6 +203,15 @@ export class PIX extends Entity {
     this.set("size", Value.fromBigInt(value));
   }
 
+  get tier(): BigInt {
+    let value = this.get("tier");
+    return value.toBigInt();
+  }
+
+  set tier(value: BigInt) {
+    this.set("tier", Value.fromBigInt(value));
+  }
+
   get account(): string {
     let value = this.get("account");
     return value.toString();
@@ -227,6 +236,15 @@ export class PIX extends Entity {
     } else {
       this.set("sale", Value.fromString(value as string));
     }
+  }
+
+  get tokenMetadataURI(): string {
+    let value = this.get("tokenMetadataURI");
+    return value.toString();
+  }
+
+  set tokenMetadataURI(value: string) {
+    this.set("tokenMetadataURI", Value.fromString(value));
   }
 }
 

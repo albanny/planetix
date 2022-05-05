@@ -1,16 +1,16 @@
-import { BigInt } from "@graphprotocol/graph-ts";
-import { Transfer, PIXMinted, Requested, Requested1 } from "./entities/PIX/PIX";
+import { BigInt } from '@graphprotocol/graph-ts';
+import { Transfer, PIXMinted, Requested, Requested1 } from './entities/PIX/PIX';
 import {
   Global,
   Account,
   PIX,
   PIXTransfer,
   PIXRequested,
-} from "./entities/schema";
-import { createAccount } from "./account";
-import { PIX as PIXContract } from "../src/entities/PIX/PIX";
+} from './entities/schema';
+import { createAccount } from './account';
+import { PIX as PIXContract } from '../src/entities/PIX/PIX';
 
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export function handlePIXMinted(event: PIXMinted): void {
   if (event.params.tokenId.isZero()) return;
@@ -22,13 +22,33 @@ export function handlePIXMinted(event: PIXMinted): void {
   pix.pixId = event.params.pixId;
   pix.category = BigInt.fromI32(event.params.category);
   pix.size = BigInt.fromI32(event.params.size);
+
+  let pixContract = PIXContract.bind(event.address);
+  let result = pixContract.try_getTier(pix.tokenId);
+  if (!result.reverted) {
+    pix.tier = result.value;
+  } else {
+    pix.tier = new BigInt(0);
+  }
+
+  let tokenMetadataURIResult = pixContract.try_tokenURI(pix.tokenId);
+  if (!tokenMetadataURIResult.reverted) {
+    if (tokenMetadataURIResult.value.startsWith('ipfs://')) {
+      pix.tokenMetadataURI = `https://ipfs.io/ipfs/${tokenMetadataURIResult.value.split('ipfs://')[1]}`;
+    } else {
+      pix.tokenMetadataURI = tokenMetadataURIResult.value;
+    }
+  } else {
+    pix.tokenMetadataURI = '';
+  }
+
   pix.save();
 }
 
 export function handlePIXRequested(event: Requested): void {
-  let entity = Global.load("pixRequested");
+  let entity = Global.load('pixRequested');
   if (entity == null) {
-    entity = new Global("pixRequested");
+    entity = new Global('pixRequested');
     entity.value = new BigInt(0);
   }
 
@@ -46,9 +66,9 @@ export function handlePIXRequested(event: Requested): void {
 }
 
 export function handlePIXRequestedNew(event: Requested1): void {
-  let entity = Global.load("pixRequested");
+  let entity = Global.load('pixRequested');
   if (entity == null) {
-    entity = new Global("pixRequested");
+    entity = new Global('pixRequested');
     entity.value = new BigInt(0);
   }
 
@@ -83,9 +103,9 @@ export function handleTransfer(event: Transfer): void {
   account.balance = account.balance.plus(BigInt.fromI32(1));
   account.save();
 
-  let transferEntity = Global.load("totalTransfer");
+  let transferEntity = Global.load('totalTransfer');
   if (transferEntity == null) {
-    transferEntity = new Global("totalTransfer");
+    transferEntity = new Global('totalTransfer');
     transferEntity.value = BigInt.fromI32(0);
   }
   transferEntity.value = transferEntity.value.plus(BigInt.fromI32(1));
@@ -100,9 +120,9 @@ export function handleTransfer(event: Transfer): void {
 }
 
 function getPIXId(id: BigInt): string {
-  return "PIX - " + id.toString();
+  return 'PIX - ' + id.toString();
 }
 
 function getPIXTransferId(id: BigInt): string {
-  return "PIXTransfer - " + id.toString();
+  return 'PIXTransfer - ' + id.toString();
 }

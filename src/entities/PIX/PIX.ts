@@ -1348,6 +1348,25 @@ export class PIX extends ethereum.SmartContract {
       new PIX__treasuryResult(value[0].toAddress(), value[1].toBigInt())
     );
   }
+
+  getTier(tokenId: BigInt): BigInt {
+    let result = super.call("getTier", "getTier(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getTier(tokenId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getTier", "getTier(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
 }
 
 export class ApproveCall extends ethereum.Call {

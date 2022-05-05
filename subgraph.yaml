@@ -84,6 +84,8 @@ dataSources:
           handler: handleSaleCancelled
         - event: Purchased(indexed address,indexed address,indexed uint256,uint256)
           handler: handleSalePurchased
+        - event: PurchasedWithSignature(indexed address,indexed address,address,uint256,uint256)
+          handler: handleSalePurchasedWithSignature
 
   - kind: ethereum/contract
     name: PIXAuctionSale

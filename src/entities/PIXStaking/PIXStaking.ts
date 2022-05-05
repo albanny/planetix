@@ -136,18 +136,64 @@ export class PIXStaking extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  earned(account: Address): BigInt {
-    let result = super.call("earned", "earned(address):(uint256)", [
-      ethereum.Value.fromAddress(account)
+  earned(tokenId: BigInt): BigInt {
+    let result = super.call("earned", "earned(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
     ]);
 
     return result[0].toBigInt();
   }
 
-  try_earned(account: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("earned", "earned(address):(uint256)", [
-      ethereum.Value.fromAddress(account)
+  try_earned(tokenId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("earned", "earned(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
     ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  earnedBatch(tokenIds: Array<BigInt>): Array<BigInt> {
+    let result = super.call(
+      "earnedBatch",
+      "earnedBatch(uint256[]):(uint256[])",
+      [ethereum.Value.fromUnsignedBigIntArray(tokenIds)]
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_earnedBatch(tokenIds: Array<BigInt>): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "earnedBatch",
+      "earnedBatch(uint256[]):(uint256[])",
+      [ethereum.Value.fromUnsignedBigIntArray(tokenIds)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
+  earnedByAccount(account: Address): BigInt {
+    let result = super.call(
+      "earnedByAccount",
+      "earnedByAccount(address):(uint256)",
+      [ethereum.Value.fromAddress(account)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_earnedByAccount(account: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "earnedByAccount",
+      "earnedByAccount(address):(uint256)",
+      [ethereum.Value.fromAddress(account)]
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -208,6 +254,29 @@ export class PIXStaking extends ethereum.SmartContract {
       "lastUpdateTime",
       "lastUpdateTime():(uint256)",
       []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  nftRewardPerTierPaid(param0: BigInt): BigInt {
+    let result = super.call(
+      "nftRewardPerTierPaid",
+      "nftRewardPerTierPaid(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_nftRewardPerTierPaid(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "nftRewardPerTierPaid",
+      "nftRewardPerTierPaid(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -399,18 +468,47 @@ export class PIXStaking extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  rewards(param0: Address): BigInt {
-    let result = super.call("rewards", "rewards(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
+  rewards(param0: BigInt): BigInt {
+    let result = super.call("rewards", "rewards(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
     ]);
 
     return result[0].toBigInt();
   }
 
-  try_rewards(param0: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("rewards", "rewards(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
+  try_rewards(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("rewards", "rewards(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
     ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  stakedNFTs(param0: Address, param1: BigInt): BigInt {
+    let result = super.call(
+      "stakedNFTs",
+      "stakedNFTs(address,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_stakedNFTs(param0: Address, param1: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "stakedNFTs",
+      "stakedNFTs(address,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -437,25 +535,6 @@ export class PIXStaking extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  tiers(param0: Address): BigInt {
-    let result = super.call("tiers", "tiers(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_tiers(param0: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("tiers", "tiers(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   totalTiers(): BigInt {
     let result = super.call("totalTiers", "totalTiers():(uint256)", []);
 
@@ -464,29 +543,6 @@ export class PIXStaking extends ethereum.SmartContract {
 
   try_totalTiers(): ethereum.CallResult<BigInt> {
     let result = super.tryCall("totalTiers", "totalTiers():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  userRewardPerTierPaid(param0: Address): BigInt {
-    let result = super.call(
-      "userRewardPerTierPaid",
-      "userRewardPerTierPaid(address):(uint256)",
-      [ethereum.Value.fromAddress(param0)]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_userRewardPerTierPaid(param0: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "userRewardPerTierPaid",
-      "userRewardPerTierPaid(address):(uint256)",
-      [ethereum.Value.fromAddress(param0)]
-    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -517,6 +573,36 @@ export class ClaimCall__Outputs {
   _call: ClaimCall;
 
   constructor(call: ClaimCall) {
+    this._call = call;
+  }
+}
+
+export class ClaimBatchCall extends ethereum.Call {
+  get inputs(): ClaimBatchCall__Inputs {
+    return new ClaimBatchCall__Inputs(this);
+  }
+
+  get outputs(): ClaimBatchCall__Outputs {
+    return new ClaimBatchCall__Outputs(this);
+  }
+}
+
+export class ClaimBatchCall__Inputs {
+  _call: ClaimBatchCall;
+
+  constructor(call: ClaimBatchCall) {
+    this._call = call;
+  }
+
+  get tokenIds(): Array<BigInt> {
+    return this._call.inputValues[0].value.toBigIntArray();
+  }
+}
+
+export class ClaimBatchCall__Outputs {
+  _call: ClaimBatchCall;
+
+  constructor(call: ClaimBatchCall) {
     this._call = call;
   }
 }
@@ -704,7 +790,7 @@ export class StakeCall__Inputs {
     this._call = call;
   }
 
-  get _tokenId(): BigInt {
+  get tokenId(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
 }
@@ -764,7 +850,7 @@ export class UnstakeCall__Inputs {
     this._call = call;
   }
 
-  get _tokenId(): BigInt {
+  get tokenId(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
 }

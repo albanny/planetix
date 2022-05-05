@@ -85,6 +85,8 @@ type SaleLog @entity {
   logId: BigInt!
   sale: Sale!
   status: BigInt!
+  price: BigInt
+  endTime: BigInt
 }
 
 type Bid @entity {

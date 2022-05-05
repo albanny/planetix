@@ -81,6 +81,18 @@ export function handleAuctionUpdated(event: SaleUpdated): void {
   let sale = Sale.load(getSaleId(event.params.saleId));
   sale.endTime = event.params.newEndTime;
   sale.save();
+
+  let totalEntity = Global.load("totalSaleLogs");
+
+  let saleLog = new SaleLog(totalEntity.value.toString());
+  saleLog.logId = totalEntity.value;
+  saleLog.sale = getSaleId(event.params.saleId);
+  saleLog.status = BigInt.fromI32(3);
+  saleLog.endTime = event.params.newEndTime;
+  saleLog.save();
+
+  totalEntity.value = totalEntity.value.plus(BigInt.fromI32(1));
+  totalEntity.save();
 }
 
 export function handleAuctionCancelled(event: SaleCancelled): void {

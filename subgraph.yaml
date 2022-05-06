@@ -36,7 +36,7 @@ dataSources:
     name: PIXStaking
     network: mumbai
     source:
-      address: "0x8A363794A72A0E39417f0F8EC3Fe73fA57a71Aa1"
+      address: "0x35A682757D24E1de126966259A7E10Fc3f8f86bb"
       abi: PIXStaking
       startBlock: 26200827
     mapping:

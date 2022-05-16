@@ -1,11 +1,11 @@
 {
-  "name": "planetix-game-subgraph",
+  "name": "territoriesmain",
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "codegen": "graph codegen --debug --output-dir src/entities/",
     "build": "graph build",
-    "deploy": "graph deploy --product hosted-service albanny/planetixgamedev\n",
+    "deploy": "graph deploy --product hosted-service albanny/territoriesmain\n",
     "auth": "graph auth --studio 2579958cb87c4a718d0493d42454ea42"
   },
   "dependencies": {

@@ -119,6 +119,7 @@ export function handleSalePurchased(event: Purchased): void {
   let sale = Sale.load(getSaleId(event.params.saleId));
   createAccount(event.params.buyer);
   sale.taker = event.params.buyer.toHexString();
+  sale.price = event.params.price;
   sale.isActive = false;
   sale.soldDate = event.block.timestamp;
   sale.save();

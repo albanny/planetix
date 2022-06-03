@@ -1,26 +1,26 @@
-import { BigInt } from "@graphprotocol/graph-ts";
-import { createAccount } from "./account";
+import { BigInt } from '@graphprotocol/graph-ts';
+import { createAccount } from './account';
 import {
   SaleRequested,
   SaleUpdated,
   SaleCancelled,
   Purchased,
   PurchasedWithSignature,
-} from "./entities/PIXFixedSale/PIXFixedSale";
-import { Global, Sale, SaleLog, PIX } from "./entities/schema";
+} from './entities/PIXFixedSale/PIXFixedSale';
+import { Global, Sale, SaleLog, PIX } from './entities/schema';
 
 export function handleSaleRequested(event: SaleRequested): void {
-  let entity = Global.load("fixedSales");
+  let entity = Global.load('fixedSales');
   if (entity == null) {
-    entity = new Global("fixedSales");
+    entity = new Global('fixedSales');
     entity.value = new BigInt(0);
   }
   entity.value = entity.value.plus(BigInt.fromI32(1));
   entity.save();
 
-  let salesEntity = Global.load("pixOnSale");
+  let salesEntity = Global.load('pixOnSale');
   if (salesEntity == null) {
-    salesEntity = new Global("pixOnSale");
+    salesEntity = new Global('pixOnSale');
     salesEntity.value = new BigInt(0);
   }
   salesEntity.value = salesEntity.value.plus(
@@ -54,9 +54,9 @@ export function handleSaleRequested(event: SaleRequested): void {
     }
   }
 
-  let totalEntity = Global.load("totalSaleLogs");
+  let totalEntity = Global.load('totalSaleLogs');
   if (totalEntity == null) {
-    totalEntity = new Global("totalSaleLogs");
+    totalEntity = new Global('totalSaleLogs');
     totalEntity.value = new BigInt(0);
   }
 
@@ -75,7 +75,7 @@ export function handleSaleUpdated(event: SaleUpdated): void {
   sale.price = event.params.newPrice;
   sale.save();
 
-  let totalEntity = Global.load("totalSaleLogs");
+  let totalEntity = Global.load('totalSaleLogs');
 
   let saleLog = new SaleLog(totalEntity.value.toString());
   saleLog.logId = totalEntity.value;
@@ -93,17 +93,17 @@ export function handleSaleCancelled(event: SaleCancelled): void {
   sale.isActive = false;
   sale.save();
 
-  let entity = Global.load("fixedSales");
+  let entity = Global.load('fixedSales');
   entity.value = entity.value.minus(BigInt.fromI32(1));
   entity.save();
 
-  let salesEntity = Global.load("pixOnSale");
+  let salesEntity = Global.load('pixOnSale');
   salesEntity.value = salesEntity.value.minus(
     BigInt.fromI32(sale.tokenIds.length)
   );
   salesEntity.save();
 
-  let totalEntity = Global.load("totalSaleLogs");
+  let totalEntity = Global.load('totalSaleLogs');
 
   let saleLog = new SaleLog(totalEntity.value.toString());
   saleLog.logId = totalEntity.value;
@@ -123,17 +123,17 @@ export function handleSalePurchased(event: Purchased): void {
   sale.soldDate = event.block.timestamp;
   sale.save();
 
-  let entity = Global.load("fixedSales");
+  let entity = Global.load('fixedSales');
   entity.value = entity.value.minus(BigInt.fromI32(1));
   entity.save();
 
-  let salesEntity = Global.load("pixOnSale");
+  let salesEntity = Global.load('pixOnSale');
   salesEntity.value = salesEntity.value.minus(
     BigInt.fromI32(sale.tokenIds.length)
   );
   salesEntity.save();
 
-  let totalEntity = Global.load("totalSaleLogs");
+  let totalEntity = Global.load('totalSaleLogs');
 
   let saleLog = new SaleLog(totalEntity.value.toString());
   saleLog.logId = totalEntity.value;
@@ -168,6 +168,21 @@ export function handleSalePurchasedWithSignature(
   sale.soldDate = event.block.timestamp;
   sale.save();
 
+  let tokenIds = sale.tokenIds as Array<BigInt>;
+  for (let i = 0; i < tokenIds.length; i++) {
+    let pix = PIX.load(getPIXId(tokenIds[i]));
+    if (pix != null) {
+      pix.sale = sale.id;
+      pix.save();
+
+      if (i == 0) {
+        sale.category = pix.category;
+        sale.size = pix.size;
+        sale.save();
+      }
+    }
+  }
+
   let totalEntity = Global.load('totalSaleLogs');
   if (totalEntity == null) {
     totalEntity = new Global('totalSaleLogs');
@@ -188,7 +203,7 @@ export function handleSalePurchasedWithSignature(
 }
 
 function getSaleId(id: BigInt): string {
-  return "F" + id.toString();
+  return 'F' + id.toString();
 }
 
 function getSaleWithHashId(id: BigInt): string {
@@ -196,5 +211,5 @@ function getSaleWithHashId(id: BigInt): string {
 }
 
 function getPIXId(id: BigInt): string {
-  return "PIX - " + id.toString();
+  return 'PIX - ' + id.toString();
 }

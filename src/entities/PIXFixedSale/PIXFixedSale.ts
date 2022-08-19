@@ -280,6 +280,29 @@ export class PIXFixedSale extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  expirationTimes(param0: BigInt): BigInt {
+    let result = super.call(
+      "expirationTimes",
+      "expirationTimes(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_expirationTimes(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "expirationTimes",
+      "expirationTimes(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   landTreasury(): PIXFixedSale__landTreasuryResult {
     let result = super.call(
       "landTreasury",

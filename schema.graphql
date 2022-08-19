@@ -21,7 +21,6 @@ type PIX @entity {
   pixId: BigInt!
   category: BigInt!
   size: BigInt!
-  tier: BigInt!
   account: Account!
   sale: Sale
   tokenMetadataURI: String!

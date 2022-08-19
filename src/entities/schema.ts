@@ -203,15 +203,6 @@ export class PIX extends Entity {
     this.set("size", Value.fromBigInt(value));
   }
 
-  get tier(): BigInt {
-    let value = this.get("tier");
-    return value.toBigInt();
-  }
-
-  set tier(value: BigInt) {
-    this.set("tier", Value.fromBigInt(value));
-  }
-
   get account(): string {
     let value = this.get("account");
     return value.toString();

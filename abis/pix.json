@@ -379,15 +379,9 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "to", "type": "address" }],
-    "name": "cancelRequest",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
-      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" }
+      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
+      { "internalType": "bytes", "name": "signature", "type": "bytes" }
     ],
     "name": "combine",
     "outputs": [],
@@ -408,13 +402,6 @@
     "name": "combinePrice",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "to", "type": "address" }],
-    "name": "completeRequest",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -440,6 +427,15 @@
     ],
     "name": "getApproved",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "name": "getTier",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -504,21 +500,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256[]", "name": "pixIds", "type": "uint256[]" },
-      {
-        "internalType": "enum IPIX.PIXCategory[]",
-        "name": "categories",
-        "type": "uint8[]"
-      }
-    ],
-    "name": "mintTo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "moderators",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
@@ -529,6 +510,13 @@
     "inputs": [],
     "name": "name",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "nonces",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -666,7 +654,7 @@
       { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" }
     ],
     "name": "pixesInLand",
-    "outputs": [{ "internalType": "bool", "name": "inside", "type": "bool" }],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -718,6 +706,17 @@
       { "internalType": "uint256", "name": "count", "type": "uint256" }
     ],
     "name": "requestBatchMintWithIXT",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" }
+    ],
+    "name": "safeBatchTransferFrom",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -803,15 +802,6 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "price", "type": "uint256" }
-    ],
-    "name": "setCombinePrice",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "uint256", "name": "dropId", "type": "uint256" },
       {
         "components": [
@@ -845,24 +835,6 @@
       { "internalType": "bool", "name": "approved", "type": "bool" }
     ],
     "name": "setModerator",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "_oracleManager", "type": "address" }
-    ],
-    "name": "setOracleManager",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256[]", "name": "pixIds", "type": "uint256[]" }
-    ],
-    "name": "setPIXInLandStatus",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -909,9 +881,15 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_swapManager", "type": "address" }
+      {
+        "internalType": "enum IPIX.PIXCategory",
+        "name": "category",
+        "type": "uint8"
+      },
+      { "internalType": "enum IPIX.PIXSize", "name": "size", "type": "uint8" },
+      { "internalType": "uint256", "name": "tier", "type": "uint256" }
     ],
-    "name": "setSwapManager",
+    "name": "setTier",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -967,6 +945,16 @@
     "inputs": [],
     "name": "symbol",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "enum IPIX.PIXCategory", "name": "", "type": "uint8" },
+      { "internalType": "enum IPIX.PIXSize", "name": "", "type": "uint8" }
+    ],
+    "name": "tiers",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -1051,30 +1039,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "pixId", "type": "uint256" }
-    ],
-    "name": "updateTerritoryInfo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "address[]", "name": "tokens", "type": "address[]" }
     ],
     "name": "withdraw",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
-    ],
-    "name": "getTier",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
     "type": "function"
   }
 ]

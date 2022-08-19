@@ -7,9 +7,9 @@ dataSources:
     name: PIX
     network: mumbai
     source:
-      address: "0x4BDcFa73220358b2072D58BD30ac565Ed1111B0c"
+      address: "0x884b54dfc22cc80cd63354e4fd2b92fd47275a9f"
       abi: PIX
-      startBlock: 21779585
+      startBlock: 27138765
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -36,9 +36,9 @@ dataSources:
     name: PIXStaking
     network: mumbai
     source:
-      address: "0x35A682757D24E1de126966259A7E10Fc3f8f86bb"
+      address: "0x0D62f169Bb0a3Cb9607ac386C0C2199732115025"
       abi: PIXStaking
-      startBlock: 26200827
+      startBlock: 27672733
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -61,9 +61,9 @@ dataSources:
     name: PIXFixedSale
     network: mumbai
     source:
-      address: "0xBEce3771FfEE740fd6c71164a2F6756f219E04C8"
+      address: "0x5a50e76c860C3d167eDaa46F9a82b47D83bb858D"
       abi: PIXFixedSale
-      startBlock: 21873535
+      startBlock: 27140475
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -87,68 +87,68 @@ dataSources:
         - event: PurchasedWithSignature(indexed address,indexed address,address,uint256,uint256)
           handler: handleSalePurchasedWithSignature
 
-  - kind: ethereum/contract
-    name: PIXAuctionSale
-    network: mumbai
-    source:
-      address: "0xD5841454FC6F4F7Af4A28583137d30b002d76351"
-      abi: PIXAuctionSale
-      startBlock: 21779787
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/auction.ts
-      entities:
-        - Global
-        - Sale
-        - Bid
-      abis:
-        - name: PIXAuctionSale
-          file: ./abis/auction.json
-      eventHandlers:
-        - event: SaleRequested(indexed address,indexed uint256,address,uint64,uint256[],uint256)
-          handler: handleAuctionRequested
-        - event: SaleUpdated(indexed uint256,uint64,uint256)
-          handler: handleAuctionUpdated
-        - event: SaleCancelled(indexed uint256)
-          handler: handleAuctionCancelled
-        - event: Bid(indexed address,indexed uint256,uint256)
-          handler: handleBid
-        - event: BidCancelled(indexed address,indexed uint256,uint256)
-          handler: handleBidCancelled
-        - event: Purchased(indexed address,indexed address,indexed uint256,uint256)
-          handler: handleAuctionPurchased
+  # - kind: ethereum/contract
+  #   name: PIXAuctionSale
+  #   network: mumbai
+  #   source:
+  #     address: "0xE03F18e3B44AB7D0696F4dfeED0c1EEBb3dCfcC6"
+  #     abi: PIXAuctionSale
+  #     startBlock: 27140573
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     file: ./src/auction.ts
+  #     entities:
+  #       - Global
+  #       - Sale
+  #       - Bid
+  #     abis:
+  #       - name: PIXAuctionSale
+  #         file: ./abis/auction.json
+  #     eventHandlers:
+  #       - event: SaleRequested(indexed address,indexed uint256,address,uint64,uint256[],uint256)
+  #         handler: handleAuctionRequested
+  #       - event: SaleUpdated(indexed uint256,uint64)
+  #         handler: handleAuctionUpdated
+  #       - event: SaleCancelled(indexed uint256)
+  #         handler: handleAuctionCancelled
+  #       - event: Bid(indexed address,indexed uint256,uint256)
+  #         handler: handleBid
+  #       - event: BidCancelled(indexed address,indexed uint256,uint256)
+  #         handler: handleBidCancelled
+  #       - event: Purchased(indexed address,indexed address,indexed uint256,uint256)
+  #         handler: handleAuctionPurchased
 
-  - kind: ethereum/contract
-    name: PIXAuctionSaleNew
-    network: mumbai
-    source:
-      address: "0xEF9b6E127A2eecCB0eEA648290e9A079EA304285"
-      abi: PIXAuctionSaleNew
-      startBlock: 25919202
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/auction_new.ts
-      entities:
-        - Global
-        - Sale
-        - Bid
-      abis:
-        - name: PIXAuctionSaleNew
-          file: ./abis/auction_new.json
-      eventHandlers:
-        - event: SaleRequested(indexed address,indexed uint256,address,uint64,uint256[],uint256)
-          handler: handleAuctionRequested
-        - event: SaleUpdated(indexed uint256,uint64)
-          handler: handleAuctionUpdated
-        - event: SaleCancelled(indexed uint256)
-          handler: handleAuctionCancelled
-        - event: Bid(indexed address,indexed uint256,uint256)
-          handler: handleBid
-        - event: BidCancelled(indexed address,indexed uint256,uint256)
-          handler: handleBidCancelled
-        - event: Purchased(indexed address,indexed address,indexed uint256,uint256)
-          handler: handleAuctionPurchased
+  # - kind: ethereum/contract
+  #   name: PIXAuctionSaleNew
+  #   network: mumbai
+  #   source:
+  #     address: "0xEAb7fC7E99A5167d3AfeB58fcA8110C12D66cCCb"
+  #     abi: PIXAuctionSaleNew
+  #     startBlock: 27140518
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     file: ./src/auction_new.ts
+  #     entities:
+  #       - Global
+  #       - Sale
+  #       - Bid
+  #     abis:
+  #       - name: PIXAuctionSaleNew
+  #         file: ./abis/auction_new.json
+  #     eventHandlers:
+  #       - event: SaleRequested(indexed address,indexed uint256,address,uint64,uint256[],uint256)
+  #         handler: handleAuctionRequested
+  #       - event: SaleUpdated(indexed uint256,uint64)
+  #         handler: handleAuctionUpdated
+  #       - event: SaleCancelled(indexed uint256)
+  #         handler: handleAuctionCancelled
+  #       - event: Bid(indexed address,indexed uint256,uint256)
+  #         handler: handleBid
+  #       - event: BidCancelled(indexed address,indexed uint256,uint256)
+  #         handler: handleBidCancelled
+  #       - event: Purchased(indexed address,indexed address,indexed uint256,uint256)
+  #         handler: handleAuctionPurchased

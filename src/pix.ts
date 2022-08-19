@@ -8,7 +8,6 @@ import {
   PIXRequested,
 } from './entities/schema';
 import { createAccount } from './account';
-import { PIX as PIXContract } from '../src/entities/PIX/PIX';
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -22,25 +21,7 @@ export function handlePIXMinted(event: PIXMinted): void {
   pix.pixId = event.params.pixId;
   pix.category = BigInt.fromI32(event.params.category);
   pix.size = BigInt.fromI32(event.params.size);
-
-  let pixContract = PIXContract.bind(event.address);
-  let result = pixContract.try_getTier(pix.tokenId);
-  if (!result.reverted) {
-    pix.tier = result.value;
-  } else {
-    pix.tier = new BigInt(0);
-  }
-
-  let tokenMetadataURIResult = pixContract.try_tokenURI(pix.tokenId);
-  if (!tokenMetadataURIResult.reverted) {
-    if (tokenMetadataURIResult.value.startsWith('ipfs://')) {
-      pix.tokenMetadataURI = `https://ipfs.io/ipfs/${tokenMetadataURIResult.value.split('ipfs://')[1]}`;
-    } else {
-      pix.tokenMetadataURI = tokenMetadataURIResult.value;
-    }
-  } else {
-    pix.tokenMetadataURI = '';
-  }
+  pix.tokenMetadataURI = `https://api.planetix.com/api/v1/pix/${event.params.tokenId.toString()}`;
 
   pix.save();
 }

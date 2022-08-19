@@ -591,6 +591,25 @@ export class PIX extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  getTier(tokenId: BigInt): BigInt {
+    let result = super.call("getTier", "getTier(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getTier(tokenId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getTier", "getTier(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   isApprovedForAll(owner: Address, operator: Address): boolean {
     let result = super.call(
       "isApprovedForAll",
@@ -753,6 +772,25 @@ export class PIX extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  nonces(param0: Address): BigInt {
+    let result = super.call("nonces", "nonces(address):(uint256)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_nonces(param0: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("nonces", "nonces(address):(uint256)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   oracleManager(): Address {
@@ -1207,6 +1245,27 @@ export class PIX extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
+  tiers(param0: i32, param1: i32): BigInt {
+    let result = super.call("tiers", "tiers(uint8,uint8):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_tiers(param0: i32, param1: i32): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("tiers", "tiers(uint8,uint8):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   tokenByIndex(index: BigInt): BigInt {
     let result = super.call("tokenByIndex", "tokenByIndex(uint256):(uint256)", [
       ethereum.Value.fromUnsignedBigInt(index)
@@ -1348,25 +1407,6 @@ export class PIX extends ethereum.SmartContract {
       new PIX__treasuryResult(value[0].toAddress(), value[1].toBigInt())
     );
   }
-
-  getTier(tokenId: BigInt): BigInt {
-    let result = super.call("getTier", "getTier(uint256):(uint256)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_getTier(tokenId: BigInt): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("getTier", "getTier(uint256):(uint256)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
 }
 
 export class ApproveCall extends ethereum.Call {
@@ -1453,36 +1493,6 @@ export class BatchMintCallInfosStruct extends ethereum.Tuple {
   }
 }
 
-export class CancelRequestCall extends ethereum.Call {
-  get inputs(): CancelRequestCall__Inputs {
-    return new CancelRequestCall__Inputs(this);
-  }
-
-  get outputs(): CancelRequestCall__Outputs {
-    return new CancelRequestCall__Outputs(this);
-  }
-}
-
-export class CancelRequestCall__Inputs {
-  _call: CancelRequestCall;
-
-  constructor(call: CancelRequestCall) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class CancelRequestCall__Outputs {
-  _call: CancelRequestCall;
-
-  constructor(call: CancelRequestCall) {
-    this._call = call;
-  }
-}
-
 export class CombineCall extends ethereum.Call {
   get inputs(): CombineCall__Inputs {
     return new CombineCall__Inputs(this);
@@ -1503,42 +1513,16 @@ export class CombineCall__Inputs {
   get tokenIds(): Array<BigInt> {
     return this._call.inputValues[0].value.toBigIntArray();
   }
+
+  get signature(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
 }
 
 export class CombineCall__Outputs {
   _call: CombineCall;
 
   constructor(call: CombineCall) {
-    this._call = call;
-  }
-}
-
-export class CompleteRequestCall extends ethereum.Call {
-  get inputs(): CompleteRequestCall__Inputs {
-    return new CompleteRequestCall__Inputs(this);
-  }
-
-  get outputs(): CompleteRequestCall__Outputs {
-    return new CompleteRequestCall__Outputs(this);
-  }
-}
-
-export class CompleteRequestCall__Inputs {
-  _call: CompleteRequestCall;
-
-  constructor(call: CompleteRequestCall) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class CompleteRequestCall__Outputs {
-  _call: CompleteRequestCall;
-
-  constructor(call: CompleteRequestCall) {
     this._call = call;
   }
 }
@@ -1573,44 +1557,6 @@ export class InitializeCall__Outputs {
   _call: InitializeCall;
 
   constructor(call: InitializeCall) {
-    this._call = call;
-  }
-}
-
-export class MintToCall extends ethereum.Call {
-  get inputs(): MintToCall__Inputs {
-    return new MintToCall__Inputs(this);
-  }
-
-  get outputs(): MintToCall__Outputs {
-    return new MintToCall__Outputs(this);
-  }
-}
-
-export class MintToCall__Inputs {
-  _call: MintToCall;
-
-  constructor(call: MintToCall) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get pixIds(): Array<BigInt> {
-    return this._call.inputValues[1].value.toBigIntArray();
-  }
-
-  get categories(): Array<i32> {
-    return this._call.inputValues[2].value.toI32Array();
-  }
-}
-
-export class MintToCall__Outputs {
-  _call: MintToCall;
-
-  constructor(call: MintToCall) {
     this._call = call;
   }
 }
@@ -1725,6 +1671,44 @@ export class RequestBatchMintWithIXTCall__Outputs {
   _call: RequestBatchMintWithIXTCall;
 
   constructor(call: RequestBatchMintWithIXTCall) {
+    this._call = call;
+  }
+}
+
+export class SafeBatchTransferFromCall extends ethereum.Call {
+  get inputs(): SafeBatchTransferFromCall__Inputs {
+    return new SafeBatchTransferFromCall__Inputs(this);
+  }
+
+  get outputs(): SafeBatchTransferFromCall__Outputs {
+    return new SafeBatchTransferFromCall__Outputs(this);
+  }
+}
+
+export class SafeBatchTransferFromCall__Inputs {
+  _call: SafeBatchTransferFromCall;
+
+  constructor(call: SafeBatchTransferFromCall) {
+    this._call = call;
+  }
+
+  get from(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get tokenIds(): Array<BigInt> {
+    return this._call.inputValues[2].value.toBigIntArray();
+  }
+}
+
+export class SafeBatchTransferFromCall__Outputs {
+  _call: SafeBatchTransferFromCall;
+
+  constructor(call: SafeBatchTransferFromCall) {
     this._call = call;
   }
 }
@@ -1955,36 +1939,6 @@ export class SetBlacklistedAddressCall__Outputs {
   }
 }
 
-export class SetCombinePriceCall extends ethereum.Call {
-  get inputs(): SetCombinePriceCall__Inputs {
-    return new SetCombinePriceCall__Inputs(this);
-  }
-
-  get outputs(): SetCombinePriceCall__Outputs {
-    return new SetCombinePriceCall__Outputs(this);
-  }
-}
-
-export class SetCombinePriceCall__Inputs {
-  _call: SetCombinePriceCall;
-
-  constructor(call: SetCombinePriceCall) {
-    this._call = call;
-  }
-
-  get price(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetCombinePriceCall__Outputs {
-  _call: SetCombinePriceCall;
-
-  constructor(call: SetCombinePriceCall) {
-    this._call = call;
-  }
-}
-
 export class SetDropInfoCall extends ethereum.Call {
   get inputs(): SetDropInfoCall__Inputs {
     return new SetDropInfoCall__Inputs(this);
@@ -2071,66 +2025,6 @@ export class SetModeratorCall__Outputs {
   _call: SetModeratorCall;
 
   constructor(call: SetModeratorCall) {
-    this._call = call;
-  }
-}
-
-export class SetOracleManagerCall extends ethereum.Call {
-  get inputs(): SetOracleManagerCall__Inputs {
-    return new SetOracleManagerCall__Inputs(this);
-  }
-
-  get outputs(): SetOracleManagerCall__Outputs {
-    return new SetOracleManagerCall__Outputs(this);
-  }
-}
-
-export class SetOracleManagerCall__Inputs {
-  _call: SetOracleManagerCall;
-
-  constructor(call: SetOracleManagerCall) {
-    this._call = call;
-  }
-
-  get _oracleManager(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class SetOracleManagerCall__Outputs {
-  _call: SetOracleManagerCall;
-
-  constructor(call: SetOracleManagerCall) {
-    this._call = call;
-  }
-}
-
-export class SetPIXInLandStatusCall extends ethereum.Call {
-  get inputs(): SetPIXInLandStatusCall__Inputs {
-    return new SetPIXInLandStatusCall__Inputs(this);
-  }
-
-  get outputs(): SetPIXInLandStatusCall__Outputs {
-    return new SetPIXInLandStatusCall__Outputs(this);
-  }
-}
-
-export class SetPIXInLandStatusCall__Inputs {
-  _call: SetPIXInLandStatusCall;
-
-  constructor(call: SetPIXInLandStatusCall) {
-    this._call = call;
-  }
-
-  get pixIds(): Array<BigInt> {
-    return this._call.inputValues[0].value.toBigIntArray();
-  }
-}
-
-export class SetPIXInLandStatusCall__Outputs {
-  _call: SetPIXInLandStatusCall;
-
-  constructor(call: SetPIXInLandStatusCall) {
     this._call = call;
   }
 }
@@ -2271,32 +2165,40 @@ export class SetRelationForDropsCall__Outputs {
   }
 }
 
-export class SetSwapManagerCall extends ethereum.Call {
-  get inputs(): SetSwapManagerCall__Inputs {
-    return new SetSwapManagerCall__Inputs(this);
+export class SetTierCall extends ethereum.Call {
+  get inputs(): SetTierCall__Inputs {
+    return new SetTierCall__Inputs(this);
   }
 
-  get outputs(): SetSwapManagerCall__Outputs {
-    return new SetSwapManagerCall__Outputs(this);
+  get outputs(): SetTierCall__Outputs {
+    return new SetTierCall__Outputs(this);
   }
 }
 
-export class SetSwapManagerCall__Inputs {
-  _call: SetSwapManagerCall;
+export class SetTierCall__Inputs {
+  _call: SetTierCall;
 
-  constructor(call: SetSwapManagerCall) {
+  constructor(call: SetTierCall) {
     this._call = call;
   }
 
-  get _swapManager(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get category(): i32 {
+    return this._call.inputValues[0].value.toI32();
+  }
+
+  get size(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+
+  get tier(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
   }
 }
 
-export class SetSwapManagerCall__Outputs {
-  _call: SetSwapManagerCall;
+export class SetTierCall__Outputs {
+  _call: SetTierCall;
 
-  constructor(call: SetSwapManagerCall) {
+  constructor(call: SetTierCall) {
     this._call = call;
   }
 }
@@ -2463,40 +2365,6 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateTerritoryInfoCall extends ethereum.Call {
-  get inputs(): UpdateTerritoryInfoCall__Inputs {
-    return new UpdateTerritoryInfoCall__Inputs(this);
-  }
-
-  get outputs(): UpdateTerritoryInfoCall__Outputs {
-    return new UpdateTerritoryInfoCall__Outputs(this);
-  }
-}
-
-export class UpdateTerritoryInfoCall__Inputs {
-  _call: UpdateTerritoryInfoCall;
-
-  constructor(call: UpdateTerritoryInfoCall) {
-    this._call = call;
-  }
-
-  get tokenId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get pixId(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-}
-
-export class UpdateTerritoryInfoCall__Outputs {
-  _call: UpdateTerritoryInfoCall;
-
-  constructor(call: UpdateTerritoryInfoCall) {
     this._call = call;
   }
 }

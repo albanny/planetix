@@ -1,6 +1,11 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { PIXStaked, PIXUnstaked } from './entities/PIXStaking/PIXStaking';
 import { PIXStaking, PIX, Global } from './entities/schema';
+import { PIX as PIXContract } from '../src/entities/PIX/PIX';
+
+let PIX_NFT_ADDRESS = Address.fromString(
+  '0x884b54dfc22cc80cd63354e4fd2b92fd47275a9f'
+);
 
 export function handlePIXStaked(event: PIXStaked): void {
   let pixStaking = PIXStaking.load(
@@ -37,7 +42,13 @@ export function handlePIXStaked(event: PIXStaked): void {
     entityTVL = new Global(getPIXStakingCategoryTVLId(pixStaking.category));
     entityTVL.value = new BigInt(0);
   }
-  entityTVL.value = entityTVL.value.plus(pix.tier);
+
+  let pixContract = PIXContract.bind(PIX_NFT_ADDRESS);
+  let result = pixContract.try_getTier(pix.tokenId);
+  if (!result.reverted) {
+    entityTVL.value = entityTVL.value.plus(result.value);
+  }
+
   entityTVL.save();
 }
 
@@ -56,7 +67,11 @@ export function handlePIXUnstaked(event: PIXUnstaked): void {
   entity.save();
 
   let entityTVL = Global.load(getPIXStakingCategoryTVLId(pixStaking.category));
-  entityTVL.value = entityTVL.value.minus(pix.tier);
+  let pixContract = PIXContract.bind(PIX_NFT_ADDRESS);
+  let result = pixContract.try_getTier(pix.tokenId);
+  if (!result.reverted) {
+    entityTVL.value = entityTVL.value.minus(result.value);
+  }
   entityTVL.save();
 }
 

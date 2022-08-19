@@ -5,56 +5,6 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "bidder",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "saleId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "bidAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "Bid",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "bidder",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "saleId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "bidAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "BidCancelled",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
         "name": "previousOwner",
         "type": "address"
       },
@@ -104,28 +54,15 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "saleId",
-        "type": "uint256"
-      }
-    ],
-    "name": "SaleCancelled",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "address",
         "name": "seller",
         "type": "address"
       },
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "saleId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
       },
       {
         "indexed": false,
@@ -135,24 +72,42 @@
       },
       {
         "indexed": false,
-        "internalType": "uint64",
-        "name": "endTime",
-        "type": "uint64"
-      },
-      {
-        "indexed": false,
         "internalType": "uint256[]",
         "name": "tokenIds",
         "type": "uint256[]"
       },
       {
         "indexed": false,
+        "internalType": "uint256[]",
+        "name": "tokenAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32[]",
+        "name": "hashes",
+        "type": "bytes32[]"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "is721",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "inLandmark",
+        "type": "bool"
       }
     ],
-    "name": "SaleRequested",
+    "name": "PurchasedV2",
     "type": "event"
   },
   {
@@ -163,15 +118,9 @@
         "internalType": "uint256",
         "name": "saleId",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint64",
-        "name": "newEndTime",
-        "type": "uint64"
       }
     ],
-    "name": "SaleUpdated",
+    "name": "SaleCancelled",
     "type": "event"
   },
   {
@@ -214,23 +163,15 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_saleId", "type": "uint256" }
+      {
+        "internalType": "bytes32[]",
+        "name": "signatures",
+        "type": "bytes32[]"
+      },
+      { "internalType": "uint256", "name": "idx", "type": "uint256" },
+      { "internalType": "bytes", "name": "sig", "type": "bytes" }
     ],
-    "name": "cancelSale",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "buyer", "type": "address" },
-      { "internalType": "uint256", "name": "price", "type": "uint256" },
-      { "internalType": "uint256", "name": "saleId", "type": "uint256" },
-      { "internalType": "uint8", "name": "v", "type": "uint8" },
-      { "internalType": "bytes32", "name": "r", "type": "bytes32" },
-      { "internalType": "bytes32", "name": "s", "type": "bytes32" }
-    ],
-    "name": "endAuction",
+    "name": "cancel",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -238,11 +179,26 @@
   {
     "inputs": [
       { "internalType": "address", "name": "_pixt", "type": "address" },
-      { "internalType": "address", "name": "_pix", "type": "address" }
+      { "internalType": "address", "name": "_pix", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "_pixMerkleMinter",
+        "type": "address"
+      }
     ],
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "invalidSales",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -264,12 +220,9 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "nonces",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "moderators",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -283,13 +236,6 @@
     "name": "onERC721Received",
     "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "operator",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -346,65 +292,10 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_nftToken", "type": "address" },
-      { "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" },
-      { "internalType": "uint64", "name": "_endTime", "type": "uint64" },
-      { "internalType": "uint256", "name": "_minPrice", "type": "uint256" }
+      { "internalType": "address", "name": "moderator", "type": "address" },
+      { "internalType": "bool", "name": "approved", "type": "bool" }
     ],
-    "name": "requestSale",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "saleInfo",
-    "outputs": [
-      { "internalType": "address", "name": "seller", "type": "address" },
-      { "internalType": "address", "name": "nftToken", "type": "address" },
-      { "internalType": "uint64", "name": "endTime", "type": "uint64" },
-      { "internalType": "uint256", "name": "minPrice", "type": "uint256" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "saleState",
-    "outputs": [
-      { "internalType": "address", "name": "bidder", "type": "address" },
-      { "internalType": "uint256", "name": "bidAmount", "type": "uint256" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "holder", "type": "address" }
-    ],
-    "name": "setBurnHolder",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "_operator", "type": "address" }
-    ],
-    "name": "setOperator",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_pixMerkleMinter",
-        "type": "address"
-      }
-    ],
-    "name": "setPixMerkleMinter",
+    "name": "setModerator",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -436,16 +327,6 @@
       { "internalType": "address", "name": "newOwner", "type": "address" }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "_saleId", "type": "uint256" },
-      { "internalType": "uint64", "name": "_endTime", "type": "uint64" }
-    ],
-    "name": "updateSale",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

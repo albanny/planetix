@@ -49,6 +49,8 @@ dataSources:
         - PIX
         - Global
       abis:
+        - name: PIX
+          file: ./abis/pix.json
         - name: PIXStaking
           file: ./abis/pix_staking.json
       eventHandlers:

@@ -4,6 +4,56 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint256",
+        "name": "epochId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startTimestamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endTimestamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalEpochReward",
+        "type": "uint256"
+      }
+    ],
+    "name": "EpochAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "moderator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
+      }
+    ],
+    "name": "ModeratorUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
         "type": "address"
@@ -89,6 +139,31 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      }
+    ],
+    "name": "RewardClaimedToken",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "DURATION",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
@@ -96,8 +171,22 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "epochTotalReward",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "epochDuration", "type": "uint256" }
+    ],
+    "name": "addEpochRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "claim",
+    "name": "claimAll",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -112,10 +201,15 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
-    ],
-    "name": "earned",
+    "inputs": [],
+    "name": "currentEpoch",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "currentEpochEndTimestamp",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
@@ -136,9 +230,80 @@
       { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "earnedByAccount",
-    "outputs": [
-      { "internalType": "uint256", "name": "reward", "type": "uint256" }
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
     ],
+    "name": "earnedReward",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum IPIX.PIXSize",
+        "name": "pixSize",
+        "type": "uint8"
+      },
+      {
+        "internalType": "enum IPIX.PIXCategory",
+        "name": "pixCategory",
+        "type": "uint8"
+      },
+      { "internalType": "uint256", "name": "epochId", "type": "uint256" }
+    ],
+    "name": "getPushedRewards",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum IPIX.PIXSize",
+        "name": "pixSize",
+        "type": "uint8"
+      },
+      {
+        "internalType": "enum IPIX.PIXCategory",
+        "name": "pixCategory",
+        "type": "uint8"
+      }
+    ],
+    "name": "getRewardPerToken",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" }
+    ],
+    "name": "getStakedNFTsLength",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum IPIX.PIXSize",
+        "name": "pixSize",
+        "type": "uint8"
+      },
+      {
+        "internalType": "enum IPIX.PIXCategory",
+        "name": "pixCategory",
+        "type": "uint8"
+      }
+    ],
+    "name": "getTokensStaked",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -154,17 +319,43 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "enum IPIX.PIXSize[]",
+        "name": "pixSize",
+        "type": "uint8[]"
+      },
+      {
+        "internalType": "enum IPIX.PIXCategory[]",
+        "name": "pixCategory",
+        "type": "uint8[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "rewardPercentages",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "currentStakedTokens",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_rewardPercentagesDenominator",
+        "type": "uint256"
+      }
+    ],
+    "name": "initializePoolRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
     ],
     "name": "isStaked",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "lastTimeRewardApplicable",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -176,19 +367,17 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "nftRewardPerTierPaid",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "moderators",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "reward", "type": "uint256" }
-    ],
-    "name": "notifyRewardAmount",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "nftRewardPerTierPaid",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -225,6 +414,16 @@
     "type": "function"
   },
   {
+    "inputs": [
+      { "internalType": "enum IPIX.PIXSize", "name": "", "type": "uint8" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "pushRewardNextEpochsPercentages",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
@@ -240,14 +439,21 @@
   },
   {
     "inputs": [],
-    "name": "rewardPerTier",
+    "name": "rewardPerTierStored",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "rewardPercentagePaidPerTokensStaked",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "rewardPerTierStored",
+    "name": "rewardPercentagesDenominator",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
@@ -281,9 +487,63 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "moderator", "type": "address" },
+      { "internalType": "bool", "name": "approved", "type": "bool" }
+    ],
+    "name": "setModerator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum IPIX.PIXSize",
+        "name": "pixSize",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_pushRewardNextEpochsPercentages",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "setPushRewardNextEpochsPercentages",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "distributor", "type": "address" }
     ],
     "name": "setRewardDistributor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "_rewardPercentagePaidPerTokensStaked",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "setRewardPercentagePaidPerTokensStaked",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "rewardTokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setRewardToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -311,6 +571,13 @@
     "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "stakers",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "tokenTotalRewardLastClaim",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },

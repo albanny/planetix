@@ -36,9 +36,9 @@ dataSources:
     name: PIXStaking
     network: mumbai
     source:
-      address: "0xD1E0098d596220ae2a947AF5cd840EdDcbfd1248"
+      address: "0xc3f629a1f8bb4488708d183e89fb21ba6e33c366"
       abi: PIXStaking
-      startBlock: 27755781
+      startBlock: 27888269
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
